@@ -8,37 +8,6 @@ lignes = f.readlines()
 f.close()
 
 
-#affiche chaque élément d'une liste ligne par ligne avec son indice au début
-def afficherListe(liste):
-
-	i = 0
-
-	for l in liste:
-
-		print("ligne ", i, " : ", end = '')
-		print(l)
-		i+=1
-
-#afficherListe(lignes)
-
-#renvoie les lignes de l'entete d'un fichier vcf sous la forme d'une liste de chaines de caractères
-def extraireEntete(lignes):
-
-	listeEntete = []
-
-	for l in lignes:
-
-		if(l[0] == "#"):
-
-			listeEntete.append(l)
-import re
-
-f = open("human_CEU.vcf", "r")
-
-lignes = f.readlines()
-
-f.close()
-
 
 #affiche chaque élément d'une liste ligne par ligne avec son indice au début
 def afficherListe(liste):
@@ -93,6 +62,20 @@ def testerFichier(lignes):
 		return False
 
 
+def creerDico(lignes):
+	dico = {}
+	for i in lignes:
+		id=re.search("(P\d_.*?)\s",i)
+		chr=re.search("(.*?)\s",i)
+		pos=re.search("^...*?(\d.*?)\s",i)
+		
+		if id and chr and pos:
+			#print(id.group(1))
+			#c'est un dictionnaire de dictionnaire
+			dico[id.group(1)]={"chr" : chr.group(1), "pos" : pos.group(1)} 
+	return dico
+
+
 
 			
 
@@ -103,5 +86,9 @@ afficherListe(entete)
 #print(testerEntete(entete))
 
 testerFichier(lignes)
+dico = creerDico(lignes)
+print(dico)
+
+
 
 
