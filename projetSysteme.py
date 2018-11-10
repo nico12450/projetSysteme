@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import re
 
 f = open("human_CEU.vcf", "r")
@@ -7,6 +6,7 @@ f = open("human_CEU.vcf", "r")
 lignes = f.readlines()
 
 f.close()
+
 
 
 #affiche chaque élément d'une liste ligne par ligne avec son indice au début
@@ -62,14 +62,57 @@ def testerFichier(lignes):
 		return False
 
 
+def creerDico(lignes):
+
+	dicoVariants = {}
+	
+	for i in lignes:
+
+		categories = re.search("^(.\d?)\s(\d*?)\s(.*?)\s([A-Z]*?)\s(.*?)\s(\d*?)\s(.*?)\s(.*?)\n",i)
+
+		"""
+		id=re.search("(P\d_.*?)\s",i)
+		chr=re.search("(.*?)\s",i)
+		pos=re.search("^...*?(\d.*?)\s",i)
+		
+		
+		if id and chr and pos:
+			#print(id.group(1))
+			#c'est un dictionnaire de dictionnaire
+			dico[id.group(1)]={"chr" : chr.group(1), "pos" : pos.group(1)} 
+
+		"""
+
+		if categories:
+
+			chromosome = categories.group(1)
+			position = categories.group(2)
+			identifiant = categories.group(3)
+			reference = categories.group(4)
+			alternative = categories.group(5)
+			qualite = categories.group(6)
+			filtre = categories.group(7)
+			informations = categories.group(8)
+
+			dicoVariants[identifiant] = {"chromosome" : chromosome, "position" : position, "reference" : reference, "alternative" : alternative, "qualite" : qualite, "filtre" : filtre, "informations" : informations}
+
+
+	return dicoVariants
+
+
 
 			
 
 entete = extraireEntete(lignes)
 
-#afficherListe(entete)
+afficherListe(entete)
 
 #print(testerEntete(entete))
 
 testerFichier(lignes)
+dico = creerDico(lignes)
+print(dico)
+
+
+
 
