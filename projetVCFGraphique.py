@@ -31,11 +31,12 @@ editArea.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
 
 for l in vcf.dico:
-	value = tk.StringVar()
+	#value = tk.StringVar()
 
-	value.set(l + " " + str(vcf.dico[l]))
+	#value.set(l + " " + str(vcf.dico[l]))
 
-	editArea.insert(tk.INSERT,value)
+	editArea.insert(tk.INSERT,l + " " + str(vcf.dico[l]) + "\n")
+
 """
 	entree = Entry(fenetre, textvariable=value, width=200)
 	entree.pack()
