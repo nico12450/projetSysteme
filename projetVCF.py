@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import re
 
 f = open("human_CEU.vcf", "r")
@@ -107,7 +108,7 @@ entete = extraireEntete(lignes)
 
 afficherListe(entete)
 
-#print(testerEntete(entete))
+print(testerEntete(entete))
 
 testerFichier(lignes)
 dico = creerDico(lignes)
