@@ -142,7 +142,7 @@ else:
 if testerFichier(lignes):
 	dico = creerDico(lignes)
 
-print(dico)
+#print(dico)
 
 
 
