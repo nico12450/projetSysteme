@@ -84,7 +84,10 @@ def creerDico(lignes):
 			filtre = categories.group(7)
 			informations = categories.group(8)
 
-			dicoVariants[identifiant] = {"chromosome" : chromosome, "position" : position, "reference" : reference, "alternative" : alternative, "qualite" : qualite, "filtre" : filtre, "informations" : informations}
+			if chromosome not in dicoVariants:
+				dicoVariants[chromosome] = {}
+
+			dicoVariants[chromosome][position] = {"identifiant" : identifiant, "reference" : reference, "alternative" : alternative, "qualite" : qualite, "filtre" : filtre, "informations" : informations}
 
 
 	return dicoVariants			
@@ -120,6 +123,7 @@ testerFichier(lignes)
 """
 
 lignes = []
+dico = {}
 
 if(len(sys.argv)>1):
 
@@ -137,7 +141,8 @@ else:
 
 if testerFichier(lignes):
 	dico = creerDico(lignes)
-#print(dico)
+
+print(dico)
 
 
 
