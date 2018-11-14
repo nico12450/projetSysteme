@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
-import re
+import re, sys, os
 
-f = open("human_CEU.vcf", "r")
+def recupererFichier(nomFIchier):
 
-lignes = f.readlines()
+	f = open("human_CEU.vcf", "r")
 
-f.close()
+	lignes = f.readlines()
+
+	f.close()
+
+	return lignes
 
 #affiche chaque élément d'une liste ligne par ligne avec son indice au début
 def afficherListe(liste):
@@ -85,6 +89,29 @@ def creerDico(lignes):
 
 	return dicoVariants			
 
+def estVCF(fichier):
+	r=re.search(".*.(vcf)", fichier)
+	if r:
+		#print("le fichier est bien de type vcf")
+		return True
+	else:
+		print("il ne s'agit pas d'un fichier vcf")
+		return False
+
+def nonVide(fichier):
+
+	taille = os.path.getsize(fichier)
+
+	if taille > 0:
+
+	 	#print("le fichier n'est pas vide")
+		return True
+
+	else:
+
+		print("le fichier est vide")
+		return False
+
 """
 entete = extraireEntete(lignes)
 afficherListe(entete)
@@ -92,8 +119,24 @@ print(testerEntete(entete))
 testerFichier(lignes)
 """
 
+lignes = []
+
+if(len(sys.argv)>1):
+
+	nomF = sys.argv[1]
+	print("on utilise le fichier " + nomF)
+
+	if estVCF(nomF) and nonVide(nomF):
+
+		lignes = recupererFichier(nomF)
+
+else:
+
+	print("pas de nom de fichier en entrée, on utilise human_CEU.vcf par défaut")
+	lignes = recupererFichier("human_CEU.vcf")
+
 dico = creerDico(lignes)
-print(dico)
+#print(dico)
 
 
 
