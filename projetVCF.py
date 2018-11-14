@@ -135,7 +135,8 @@ else:
 	print("pas de nom de fichier en entrée, on utilise human_CEU.vcf par défaut")
 	lignes = recupererFichier("human_CEU.vcf")
 
-dico = creerDico(lignes)
+if testerFichier(lignes):
+	dico = creerDico(lignes)
 #print(dico)
 
 
