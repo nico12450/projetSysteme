@@ -71,7 +71,7 @@ def creerDico(lignes):
 	
 	for i in lignes:
 
-		categories = re.search(r"^(.\d?)\s(\d*?)\s(.*?)\s([A-Z]*?)\s(.*?)\s(\d*?)\s(.*?)\s(.*?)\n",i)
+		categories = re.search(r"^(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*)",i)
 
 		if categories:
 
@@ -142,7 +142,7 @@ else:
 if testerFichier(lignes):
 	dico = creerDico(lignes)
 
-#print(dico)
+print(dico)
 
 
 
