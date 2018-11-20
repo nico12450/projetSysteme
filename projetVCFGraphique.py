@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import projetVCF as vcf
-
 import tkinter as tk
 import tkinter.scrolledtext as tkst
+
 
 fenetre = tk.Tk()
 
