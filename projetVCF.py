@@ -2,9 +2,9 @@
 
 import re, sys, os
 
-def recupererFichier(nomFIchier):
+def recupererFichier(nomFichier):
 
-	f = open("human_CEU.vcf", "r")
+	f = open(nomFichier, "r")
 
 	lignes = f.readlines()
 
