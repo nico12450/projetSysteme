@@ -64,7 +64,7 @@ def testerFichier(lignes):
 		print("le fichier n'est pas valide")
 		return False
 
-
+#cree un dictionnaire de données à partir d'un fichier vcf
 def creerDico(lignes):
 
 	dicoVariants = {}
@@ -92,8 +92,9 @@ def creerDico(lignes):
 
 	return dicoVariants			
 
-def estVCF(fichier):
-	r=re.search(".*.(vcf)", fichier)
+#verifie qu'un nom de fichier entré en paramètre est bien de type vcf
+def estVCF(nomFichier):
+	r=re.search(".*.(vcf)", nomFichier)
 	if r:
 		#print("le fichier est bien de type vcf")
 		return True
@@ -101,6 +102,7 @@ def estVCF(fichier):
 		print("il ne s'agit pas d'un fichier vcf")
 		return False
 
+#verifie qu'un fichier entré en parametre n'est pas vide
 def nonVide(fichier):
 
 	taille = os.path.getsize(fichier)
@@ -114,6 +116,26 @@ def nonVide(fichier):
 
 		print("le fichier est vide")
 		return False
+
+
+#verifie qu'ene ligne de format est bien présente dans l'entête du fichier dont la liste des lignes est passée en paramètre
+def testerformat(l):
+	format = re.search("#fileformat=(.+)",l[0])
+	if format:
+		return format.group(1)
+	else:
+		print("pas de format dans l'entete du fichier")
+		return null
+
+
+#renvoie le format vcf du fichier dont la liste des lignes est passée en paramètre
+def formatVCF(l):
+	format = re.search("#fileformat=(.+)",l[0])
+	if format:
+		return format.group(1)
+	else:
+		print("pas de format dans l'entete du fichier")
+		return null
 
 """
 entete = extraireEntete(lignes)
@@ -133,16 +155,18 @@ if(len(sys.argv)>1):
 	if estVCF(nomF) and nonVide(nomF):
 
 		lignes = recupererFichier(nomF)
+		print("format du fichier :", formatVCF(lignes))
 
 else:
 
 	print("pas de nom de fichier en entrée, on utilise human_CEU.vcf par défaut")
 	lignes = recupererFichier("human_CEU.vcf")
+	print("format du fichier :", formatVCF(lignes))
 
 if testerFichier(lignes):
 	dico = creerDico(lignes)
 
-print(dico)
+#print(dico)
 
 
 
