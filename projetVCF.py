@@ -71,7 +71,7 @@ def creerDico(lignes):
 	
 	for i in lignes:
 
-		categories = re.search(r"^(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*)",i)
+		categories = re.search(r"^(..?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*)",i)
 
 		if categories:
 
@@ -90,7 +90,31 @@ def creerDico(lignes):
 			dicoVariants[chromosome][position] = {"identifiant" : identifiant, "reference" : reference, "alternative" : alternative, "qualite" : qualite, "filtre" : filtre, "informations" : informations}
 
 
-	return dicoVariants			
+	return dicoVariants
+
+#cree un dictionnaire contenant les types de variations et leur nombre
+def creerDicoAlternatives(lignes):
+
+	dicoAlternatives = {}
+
+	for i in lignes:
+
+		alt = re.search(r"\s<(.*?)[:>]", i)
+
+		if alt:
+
+			alt = alt.group(1)
+
+			if alt not in dicoAlternatives:
+
+				dicoAlternatives[alt] = 1
+
+			else:
+
+				dicoAlternatives[alt] += 1
+
+	return dicoAlternatives
+
 
 #verifie qu'un nom de fichier entré en paramètre est bien de type vcf
 def estVCF(nomFichier):
@@ -146,6 +170,7 @@ testerFichier(lignes)
 
 lignes = []
 dico = {}
+dicoAlt = {}
 
 if(len(sys.argv)>1):
 
@@ -165,6 +190,7 @@ else:
 
 if testerFichier(lignes):
 	dico = creerDico(lignes)
+	dicoAlt = creerDicoAlternatives(lignes)
 
 #print(dico)
 
