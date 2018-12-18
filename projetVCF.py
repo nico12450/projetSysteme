@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import re, sys, os
+import matplotlib.pyplot as plt
 
 def recupererFichier(nomFichier):
 
@@ -71,7 +72,7 @@ def creerDico(lignes):
 	
 	for i in lignes:
 
-		categories = re.search(r"^(..?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*)",i)
+		categories = re.search(r"^(?!#)(..?).*?\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*?)\s(.*)",i)
 
 		if categories:
 
@@ -98,8 +99,10 @@ def creerDicoAlternatives(lignes):
 	dicoAlternatives = {}
 
 	for i in lignes:
+		#on récupère l'alternative pour vcf de differents types
 
 		alt = re.search(r"\s<(.*?)[:>]", i)
+		alt2 = re.search(r"^.*?\s.*?\s.*?\s([A,T,G,C]*?)\s([A,T,G,C]*?)\s",i)
 
 		if alt:
 
@@ -112,6 +115,33 @@ def creerDicoAlternatives(lignes):
 			else:
 
 				dicoAlternatives[alt] += 1
+
+		else:
+
+			if alt2:
+
+				ref = alt2.group(1) 
+				alt = alt2.group(2)
+
+				#on compare la longueur de la référence et de l'alternative pour determiner le type de variant
+
+				if len(ref) > len(alt):
+					alt = "DEL"
+
+				elif len(ref) == len(alt):
+					alt = "SUB"
+
+				else :
+					alt = "INS"
+
+				if alt not in dicoAlternatives:
+
+					dicoAlternatives[alt] = 1
+
+				else:
+
+					dicoAlternatives[alt] += 1
+
 
 	return dicoAlternatives
 
@@ -193,7 +223,53 @@ if testerFichier(lignes):
 	dicoAlt = creerDicoAlternatives(lignes)
 
 #print(dico)
+#on récupère la liste des chromosomes du dictionnaire créé précedemment
 
+chromosomes = dico.keys()
+#print(chromosomes)
+
+#on va stocker le nombre de variants pour chaque chromosome
+variantsParChromosome = []
+
+for c in chromosomes:
+    variantsParChromosome.append(len(dico[c]))
+
+#on stocke la liste des alternatives
+alternatives = dicoAlt.keys()
+variantsParAlternatives = []
+
+for a in alternatives:
+	variantsParAlternatives.append(dicoAlt[a])
+
+
+#print(variantsParChromosome)
+
+#on affiche un diagramme circulaire du nombre de variants par chromosome
+
+plt.pie(variantsParChromosome, labels=chromosomes)
+plt.title("diagramme circulaire du nombre de variants par chromosomes")
+plt.axis('equal')
+plt.show()
+
+#on affiche un diagramme en batonnet du nombre de variants par chromosome
+
+plt.bar(chromosomes,variantsParChromosome)
+plt.title("diagramme en batonnet du nombre de variants par chromosome")
+plt.show()
+
+#on affiche un diagramme circulaire du nombre de variants par type d'alternative
+
+plt.pie(variantsParAlternatives, labels=alternatives)
+plt.title("diagramme circulaire du nombre de variants par type d'alternative")
+plt.axis('equal')
+plt.show()
+
+#print(dicoAlt)
+#afficher le nombre de variants pour le chromosome 4
+#print(len(dico["4"]))
+
+#afficher les variants du chromosome 5
+#print(dico["5"])
 
 
 
